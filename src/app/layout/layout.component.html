@@ -1,0 +1,86 @@
+<div class="layout">
+  <aside class="sidebar" [class.collapsed]="collapsed">
+    <div class="sidebar-header">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="#fff" stroke-width="2"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="brand-name">Community</span>
+    </div>
+
+    <nav class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+          <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+          <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+          <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="/user" routerLinkActive="active" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Users</span>
+      </a>
+
+      <!-- Category Dropdown -->
+      <div class="nav-item nav-group" (click)="categoryOpen = !categoryOpen" [class.open]="categoryOpen">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <path d="M4 6h16M4 12h16M4 18h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Category</span>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" width="14" height="14">
+          <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-submenu" [class.open]="categoryOpen">
+        <a routerLink="/category/business"   routerLinkActive="active" class="nav-subitem">Business</a>
+        <!-- <a routerLink="/category/city"       routerLinkActive="active" class="nav-subitem">City</a>
+        <a routerLink="/category/country"    routerLinkActive="active" class="nav-subitem">Country</a>
+        <a routerLink="/category/state"      routerLinkActive="active" class="nav-subitem">State</a> -->
+        <a routerLink="/category/jilla"      routerLinkActive="active" class="nav-subitem">Jilla</a>
+        <a routerLink="/category/taluka"     routerLinkActive="active" class="nav-subitem">Taluka</a>
+        <a routerLink="/category/village"    routerLinkActive="active" class="nav-subitem">Village</a>
+        <a routerLink="/category/cast"       routerLinkActive="active" class="nav-subitem">Cast</a>
+        <a routerLink="/category/sub-cast"   routerLinkActive="active" class="nav-subitem">Sub Cast</a>
+        <a routerLink="/category/surname"    routerLinkActive="active" class="nav-subitem">Surname</a>
+        <!-- <a routerLink="/category/occupation" routerLinkActive="active" class="nav-subitem">Occupation</a>
+        <a routerLink="/category/education"  routerLinkActive="active" class="nav-subitem">Education</a> -->
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="toggle-btn" (click)="collapsed = !collapsed">
+        <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+          <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="topbar-right">
+        <div class="avatar">A</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

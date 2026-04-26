@@ -1,0 +1,20 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-cast-drawer',
+  templateUrl: './cast-drawer.component.html',
+  styleUrls: ['./cast-drawer.component.scss']
+})
+export class CastDrawerComponent {
+  @Input() cast: any = null;
+  @Input() open = false;
+  @Output() closeDrawer = new EventEmitter<void>();
+
+  getColor(name: string = ''): string {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return `hsl(${Math.abs(hash) % 360}, 70%, 85%)`;
+  }
+}

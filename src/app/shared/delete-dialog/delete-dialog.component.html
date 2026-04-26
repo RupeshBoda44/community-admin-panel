@@ -1,0 +1,16 @@
+<div class="dialog-wrap">
+  <div class="dialog-icon">
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+      <polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M9 6V4h6v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <h3>Delete Confirmation</h3>
+  <p>Are you sure you want to delete <strong>{{ data.name }}</strong>? This action cannot be undone.</p>
+  <div class="dialog-actions">
+    <button class="btn-cancel" (click)="dialogRef.close(false)">Cancel</button>
+    <button class="btn-delete" (click)="dialogRef.close(true)">Delete</button>
+  </div>
+</div>

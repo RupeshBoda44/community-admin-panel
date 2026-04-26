@@ -1,0 +1,70 @@
+<div class="page-header">
+  <div>
+    <h1>Users</h1>
+    <p>Manage all community members</p>
+  </div>
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+      <circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/>
+      <path d="m21 21-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+      placeholder="Search by name..."
+    />
+    <button class="clear-btn" *ngIf="searchQuery" (click)="searchQuery=''; onSearch()">
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+        <path d="M18 6L6 18M6 6l12 12" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <span>Loading users...</span>
+</div>
+
+<div class="error-state" *ngIf="error && !loading">
+  <svg viewBox="0 0 24 24" fill="none" width="40" height="40"><circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/></svg>
+  <p>{{ error }}</p>
+  <button class="retry-btn" (click)="loadUsers()">Retry</button>
+</div>
+
+<ng-container *ngIf="!loading && !error">
+  <div class="user-grid">
+    <div class="user-card" *ngFor="let user of users">
+      <div class="user-avatar" [style.background]="getColorFromName(user?.personalInfo?.firstName || 'User')">
+        {{ user?.personalInfo?.firstName?.[0] }}
+      </div>
+      <div class="user-info">
+        <span class="user-name">{{ user?.personalInfo?.firstName || '--' }}</span>
+        <span class="user-phone">{{ user?.businessInfo?.mobileNumber?.number }}</span>
+      </div>
+      <span class="user-badge" [class.active]="user?.status">{{ user?.status ? 'Active' : 'Inactive' }}</span>
+      <button class="edit-btn" (click)="openDrawer(user)">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <mat-paginator
+    [length]="total"
+    [pageSize]="perPage"
+    [pageIndex]="currentPage - 1"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons>
+  </mat-paginator>
+</ng-container>
+
+<app-user-drawer
+  [user]="selectedUser"
+  [open]="drawerOpen"
+  (closeDrawer)="closeDrawer()">
+</app-user-drawer>
