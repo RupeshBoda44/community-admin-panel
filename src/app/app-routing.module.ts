@@ -17,6 +17,7 @@ import { SubCastComponent } from './category/sub-cast/sub-cast.component';
 import { SurnameComponent } from './category/surname/surname.component';
 import { OccupationComponent } from './category/occupation/occupation.component';
 import { EducationComponent } from './category/education/education.component';
+import { AnnouncementComponent } from './announcement/announcement.component';
 import { AuthGuard } from './auth.guard';
 import { GuestGuard } from './guest.guard';
 
@@ -43,6 +44,7 @@ const routes: Routes = [
       { path: 'category/surname',    component: SurnameComponent },
       { path: 'category/occupation', component: OccupationComponent },
       { path: 'category/education',  component: EducationComponent },
+      { path: 'announcement',           component: AnnouncementComponent },
     ]
   },
   { path: '**', redirectTo: 'login' }

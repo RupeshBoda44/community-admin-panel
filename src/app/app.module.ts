@@ -46,6 +46,8 @@ import { VillageDrawerComponent } from './category/village/village-drawer/villag
 import { CastDrawerComponent } from './category/cast/cast-drawer/cast-drawer.component';
 import { SubCastDrawerComponent } from './category/sub-cast/sub-cast-drawer/sub-cast-drawer.component';
 import { SurnameDrawerComponent } from './category/surname/surname-drawer/surname-drawer.component';
+import { AnnouncementComponent } from './announcement/announcement.component';
+import { AnnouncementDrawerComponent } from './announcement/announcement-drawer/announcement-drawer.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { SurnameDrawerComponent } from './category/surname/surname-drawer/surnam
     VillageDrawerComponent,
     CastDrawerComponent,
     SubCastDrawerComponent,
-    SurnameDrawerComponent
+    SurnameDrawerComponent,
+    AnnouncementComponent,
+    AnnouncementDrawerComponent
   ],
   imports: [
     BrowserModule,

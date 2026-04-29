@@ -16,7 +16,7 @@ import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.
 export class TalukaComponent implements OnInit {
   private baseUrl = 'https://community-app-v2.onrender.com/api/v1';
 
-  displayedColumns = ['index', 'name', 'status', 'actions'];
+  displayedColumns = ['index', 'name', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
   loading = false;
   error = '';
@@ -42,8 +42,7 @@ export class TalukaComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      name:     ['', Validators.required],
-      isActive: [true]
+      name:     ['', Validators.required]
     });
     this.fetchList();
     this.searchSubject.pipe(debounceTime(400), distinctUntilChanged()).subscribe(() => {
@@ -56,10 +55,10 @@ export class TalukaComponent implements OnInit {
   fetchList() {
     this.loading = true;
     this.error = '';
-    const params: any = { page: this.currentPage, perPage: this.pageSize };
+    const params: any = { type: 'TALUKA', page: this.currentPage, perPage: this.pageSize };
     if (this.searchQuery.trim()) params.search = this.searchQuery.trim();
 
-    this.http.get<any>(`${this.baseUrl}/admin/taluka/list`, { params }).subscribe({
+    this.http.get<any>(`${this.baseUrl}/admin/category-option/list`, { params }).subscribe({
       next: (res) => {
         this.dataSource.data = res.data ?? [];
         this.totalRecords = res._metadata?.pagination?.total ?? 0;
@@ -102,10 +101,11 @@ export class TalukaComponent implements OnInit {
     if (this.form.invalid) return;
     this.saving = true;
     const payload = this.form.value;
+    payload.type = 'TALUKA';
 
     const req = this.drawerMode === 'add'
-      ? this.http.post(`${this.baseUrl}/admin/taluka`, payload)
-      : this.http.put(`${this.baseUrl}/admin/taluka/${this.selectedItem.id}`, payload);
+      ? this.http.post(`${this.baseUrl}/admin/category-option/create`, payload)
+      : this.http.put(`${this.baseUrl}/admin/category-option/update/${this.selectedItem._id}`, payload);
 
     req.subscribe({
       next: () => { this.saving = false; this.closeForm(); this.fetchList(); },

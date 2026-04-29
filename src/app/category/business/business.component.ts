@@ -16,7 +16,7 @@ import { DeleteDialogComponent } from '../../shared/delete-dialog/delete-dialog.
 export class BusinessComponent implements OnInit {
   private baseUrl = 'https://community-app-v2.onrender.com/api/v1';
 
-  displayedColumns = ['index', 'name', 'status', 'actions'];
+  displayedColumns = ['index', 'name', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
   loading = false;
   error = '';
@@ -38,12 +38,11 @@ export class BusinessComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private http: HttpClient, private fb: FormBuilder, private dialog: MatDialog) {}
+  constructor(private http: HttpClient, private fb: FormBuilder, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.form = this.fb.group({
-      name:     ['', Validators.required],
-      isActive: [true]
+      name: ['', Validators.required]
     });
     this.fetchList();
     this.searchSubject.pipe(debounceTime(400), distinctUntilChanged()).subscribe(() => {
@@ -56,10 +55,10 @@ export class BusinessComponent implements OnInit {
   fetchList() {
     this.loading = true;
     this.error = '';
-    const params: any = { page: this.currentPage, perPage: this.pageSize };
+    const params: any = { type: 'BUSINESS', page: this.currentPage, perPage: this.pageSize };
     if (this.searchQuery.trim()) params.search = this.searchQuery.trim();
 
-    this.http.get<any>(`${this.baseUrl}/admin/business/list`, { params }).subscribe({
+    this.http.get<any>(`${this.baseUrl}/admin/category-option/list`, { params }).subscribe({
       next: (res) => {
         this.dataSource.data = res.data ?? [];
         this.totalRecords = res._metadata?.pagination?.total ?? 0;
@@ -72,14 +71,14 @@ export class BusinessComponent implements OnInit {
   openAdd() {
     this.drawerMode = 'add';
     this.selectedItem = null;
-    this.form.reset({ name: '', isActive: true });
+    this.form.reset({ name: '' });
     this.formOpen = true;
   }
 
   openEdit(item: any) {
     this.drawerMode = 'edit';
     this.selectedItem = item;
-    this.form.patchValue({ name: item.name, isActive: item.isActive ?? true });
+    this.form.patchValue({ name: item.name });
     this.formOpen = true;
   }
 
@@ -102,10 +101,11 @@ export class BusinessComponent implements OnInit {
     if (this.form.invalid) return;
     this.saving = true;
     const payload = this.form.value;
+    payload.type = 'BUSINESS';
 
     const req = this.drawerMode === 'add'
-      ? this.http.post(`${this.baseUrl}/admin/business`, payload)
-      : this.http.put(`${this.baseUrl}/admin/business/${this.selectedItem.id}`, payload);
+      ? this.http.post(`${this.baseUrl}/admin/category-option/create`, payload)
+      : this.http.put(`${this.baseUrl}/admin/category-option/update/${this.selectedItem._id}`, payload);
 
     req.subscribe({
       next: () => { this.saving = false; this.closeForm(); this.fetchList(); },
@@ -120,7 +120,7 @@ export class BusinessComponent implements OnInit {
     });
     ref.afterClosed().subscribe(confirmed => {
       if (confirmed) {
-        this.http.delete(`${this.baseUrl}/admin/business/${item.id}`).subscribe(() => this.fetchList());
+        this.http.delete(`${this.baseUrl}/admin/category-option/delete/${item._id}`).subscribe(() => this.fetchList());
       }
     });
   }

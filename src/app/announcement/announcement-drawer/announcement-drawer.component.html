@@ -1,0 +1,35 @@
+<div class="drawer-overlay" [class.visible]="open" (click)="closeDrawer.emit()"></div>
+
+<div class="drawer" [class.open]="open">
+  <div class="drawer-header">
+    <h2>Announcement Details</h2>
+    <button class="close-btn" (click)="closeDrawer.emit()">
+      <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <ng-container *ngIf="announcement">
+    <div class="drawer-body">
+      <div class="detail-list">
+
+        <div class="detail-item">
+          <span class="detail-label">Title</span>
+          <span class="detail-value">{{ announcement.title || '-' }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Description</span>
+          <span class="detail-value desc">{{ announcement.description || '-' }}</span>
+        </div>
+
+        <div class="detail-item" *ngIf="announcement.attachment">
+          <span class="detail-label">Attachment</span>
+          <img [src]="announcement.attachment" alt="attachment" class="attachment-img" />
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+</div>

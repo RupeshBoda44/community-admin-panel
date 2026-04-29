@@ -1,14 +1,15 @@
 <div class="page-header">
   <div>
-    <h1>Business</h1>
-    <p>Manage all business categories</p>
+    <h1>Announcements</h1>
+    <p>Manage all announcements</p>
   </div>
   <div class="header-actions">
+    <input class="search-input" name="searchQuery" [(ngModel)]="searchQuery" (ngModelChange)="onSearch()" placeholder="Search announcements..." />
     <button class="btn-add" (click)="openAdd()">
       <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
         <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
       </svg>
-      Add Business
+      Add Announcement
     </button>
   </div>
 </div>
@@ -25,9 +26,14 @@
       <td mat-cell *matCellDef="let item; let i = index">{{ getRowIndex(i) }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let item">{{ item.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef>Text</th>
+      <td mat-cell *matCellDef="let item">{{ item.text }}</td>
     </ng-container>
 
     <ng-container matColumnDef="actions">
@@ -55,7 +61,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell empty-state" colspan="4">No records found.</td>
+      <td class="mat-cell empty-state" colspan="4">No announcements found.</td>
     </tr>
   </table>
 
@@ -72,7 +78,7 @@
 <div class="drawer-overlay" [class.visible]="formOpen" (click)="closeForm()"></div>
 <div class="drawer" [class.open]="formOpen">
   <div class="drawer-header">
-    <h2>{{ drawerMode === 'add' ? 'Add Business' : 'Edit Business' }}</h2>
+    <h2>{{ drawerMode === 'add' ? 'Add Announcement' : 'Edit Announcement' }}</h2>
     <button class="close-btn" (click)="closeForm()">
       <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -81,14 +87,44 @@
   </div>
   <form [formGroup]="form" class="drawer-form">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Business Name</mat-label>
-      <input matInput formControlName="name" placeholder="Enter business name"/>
-      <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter title"/>
+      <mat-error *ngIf="form.get('title')?.hasError('required')">Title is required</mat-error>
     </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Text</mat-label>
+      <textarea matInput formControlName="text" placeholder="Enter text" rows="4"></textarea>
+      <mat-error *ngIf="form.get('text')?.hasError('required')">Text is required</mat-error>
+    </mat-form-field>
+
+    <!-- Image Upload -->
+    <div class="upload-section">
+      <label class="upload-label">Attachment (Image)</label>
+      <div class="upload-box" (click)="fileInput.click()" *ngIf="!imagePreview">
+        <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Click to upload image</span>
+        <span class="upload-hint">PNG, JPG, JPEG supported</span>
+      </div>
+      <div class="image-preview" *ngIf="imagePreview">
+        <img [src]="imagePreview" alt="preview" />
+        <div class="upload-status" *ngIf="imageUploading">Uploading...</div>
+        <button class="remove-img" (click)="removeImage()" type="button" [disabled]="imageUploading">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileChange($event)" />
+      <div class="upload-error" *ngIf="imageUploadError">{{ imageUploadError }}</div>
+    </div>
   </form>
   <div class="drawer-footer">
     <button class="btn-cancel" (click)="closeForm()">Cancel</button>
-    <button class="btn-save" (click)="save()" [disabled]="saving">
+    <button class="btn-save" (click)="save()" [disabled]="saving || imageUploading">
       <span *ngIf="!saving">{{ drawerMode === 'add' ? 'Add' : 'Update' }}</span>
       <span *ngIf="saving" class="btn-spinner"></span>
     </button>
@@ -96,8 +132,8 @@
 </div>
 
 <!-- Detail Drawer -->
-<app-business-drawer
-  [business]="detailItem"
+<app-announcement-drawer
+  [announcement]="detailItem"
   [open]="detailOpen"
   (closeDrawer)="closeDetail()">
-</app-business-drawer>
+</app-announcement-drawer>
